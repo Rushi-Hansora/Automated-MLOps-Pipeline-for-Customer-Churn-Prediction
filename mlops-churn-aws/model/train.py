@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, classification_report
 
 # 1. Load Data
 print("Loading dataset...")
-data_path = 'data/WA_Fn-UseC_-Telco-Customer-Churn.csv'
+data_path = "mlops-churn-aws/data/WA_Fn-UseC_-Telco-Customer-Churn.csv"
 
 if not os.path.exists(data_path):
     raise FileNotFoundError(f"Dataset file not found at '{data_path}'. Please check Step 2.")
