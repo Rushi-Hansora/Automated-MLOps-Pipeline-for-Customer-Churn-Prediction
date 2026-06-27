@@ -34,3 +34,8 @@ variable "lambda_role_name" {
   type        = string
   default     = "mlops-lambda-role-tf"
 }
+
+variable "alert_email" {
+  description = "Email address for CloudWatch alarms"
+  type        = string
+}
