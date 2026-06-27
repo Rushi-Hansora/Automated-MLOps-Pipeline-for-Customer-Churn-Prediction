@@ -26,14 +26,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('model/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('mlops-churn-aws/model/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
       - name: Install Training Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r model/requirements.txt
+          pip install -r mlops-churn-aws/model/requirements.txt
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -46,7 +46,7 @@ jobs:
         env:
           MODEL_BUCKET: ${{ secrets.MODEL_BUCKET }}
         run: |
-          python model/train.py
+          python mlops-churn-aws/model/train.py
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -59,7 +59,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
           IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
-          docker build -t $IMAGE_URI ./app
+          docker build -t $IMAGE_URI ./mlops-churn-aws/app
 
       - name: Push Docker Image
         env:
@@ -94,13 +94,13 @@ jobs:
         env:
           API_URL: ${{ secrets.API_URL }}
         run: |
-          curl -X POST $API_URL/predict \
+          curl -X POST "$API_URL/predict" \
           -H "Content-Type: application/json" \
           -d '{
-                "tenure":12,
-                "monthly_charges":65.5,
-                "total_charges":786.0,
-                "contract":0,
-                "internet_service":1,
-                "payment_method":2
-              }'
+            "tenure":12,
+            "monthly_charges":65.5,
+            "total_charges":786.0,
+            "contract":0,
+            "internet_service":1,
+            "payment_method":2
+          }'
