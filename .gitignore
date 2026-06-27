@@ -1,1 +1,24 @@
 .env
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Environment
+.env
+
+# AWS
+*.pem
+.aws/
+
+# Model artifacts
+model/*.pkl
+
+tfplan
+churn_model.pkl

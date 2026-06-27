@@ -1,0 +1,5 @@
+{
+  "httpMethod": "POST",
+  "path": "/predict",
+  "body": "{\"tenure\":12,\"monthly_charges\":65.5,\"total_charges\":786.0,\"contract\":0,\"internet_service\":1,\"payment_method\":2}"
+}
