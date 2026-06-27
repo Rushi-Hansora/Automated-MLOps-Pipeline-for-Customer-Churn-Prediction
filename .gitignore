@@ -1,17 +1,4 @@
 .env
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.*
-.terraform.lock.hcl
-
-# Python
-__pycache__/
-*.pyc
-venv/
-
-# Environment
-.env
 
 # AWS
 *.pem
@@ -22,3 +9,24 @@ model/*.pkl
 
 tfplan
 churn_model.pkl
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.backup
+tfplan
+.terraform.lock.hcl
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Model
+model/churn_model.pkl
+
+# OS
+.DS_Store
+Thumbs.db
+
