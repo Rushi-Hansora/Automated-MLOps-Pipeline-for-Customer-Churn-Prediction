@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+     id-token: write
+     contents: read
 
     steps:
       - name: Checkout Repository
@@ -38,9 +39,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+         role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+         aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Train Model
         env:

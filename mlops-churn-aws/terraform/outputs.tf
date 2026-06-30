@@ -17,3 +17,7 @@ output "model_bucket" {
 output "api_endpoint" {
   value = aws_apigatewayv2_stage.default.invoke_url
 }
+
+output "github_actions_deploy_role_arn" {
+  value = aws_iam_role.github_actions_deploy.arn
+}
