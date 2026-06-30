@@ -13,7 +13,7 @@ def load_model():
     s3 = boto3.client("s3")
 
     bucket = os.getenv("MODEL_BUCKET", "mlops-churn-rushi")
-    model_key = "models/churn_model.pkl"
+    model_key =  "models/churn_model_latest.pkl"
     local_model_path = "/tmp/churn_model.pkl"
 
     try:

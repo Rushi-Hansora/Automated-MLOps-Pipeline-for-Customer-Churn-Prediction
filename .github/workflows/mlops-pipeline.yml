@@ -44,10 +44,11 @@ jobs:
 
       - name: Train Model
         env:
-          MODEL_BUCKET: ${{ secrets.MODEL_BUCKET }}
+         MODEL_BUCKET: ${{ secrets.MODEL_BUCKET }}
+         GITHUB_SHA: ${{ github.sha }}
         run: |
-          python mlops-churn-aws/model/train.py
-
+         python mlops-churn-aws/model/train.py
+ 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2

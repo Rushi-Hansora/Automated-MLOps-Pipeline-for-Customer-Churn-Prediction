@@ -54,19 +54,54 @@ print("\nClassification Report:")
 print(classification_report(y_test, model.predict(X_test)))
 
 # 4. Save Locally and Upload to AWS S3
+
 print("\nSaving model artifact locally...")
 os.makedirs('model', exist_ok=True)
 joblib.dump(model, 'model/churn_model.pkl')
 
 print("Uploading model artifact to AWS S3...")
+
 s3 = boto3.client('s3')
-# Pulls from environment variable or defaults to your standard portfolio bucket
+
+# Pull bucket name from environment variable
 bucket = os.environ.get('MODEL_BUCKET', 'mlops-churn-rushi')
 
+# GitHub SHA (first 8 characters)
+git_sha = os.environ.get('GITHUB_SHA', 'local')[:8]
+
 try:
-    s3.upload_file('model/churn_model.pkl', bucket, 'models/churn_model.pkl')
-    print(f'Successfully uploaded to s3://{bucket}/models/churn_model.pkl')
+    # Upload immutable version
+    versioned_key = f"models/churn_model_{git_sha}.pkl"
+
+    s3.upload_file(
+        'model/churn_model.pkl',
+        bucket,
+        versioned_key
+    )
+
+    # Upload latest pointer
+    latest_key = "models/churn_model_latest.pkl"
+
+    s3.upload_file(
+        'model/churn_model.pkl',
+        bucket,
+        latest_key
+    )
+
+    print(f"Successfully uploaded versioned model:")
+    print(f"s3://{bucket}/{versioned_key}")
+
+    print(f"Updated latest model:")
+    print(f"s3://{bucket}/{latest_key}")
+
 except Exception as e:
     print(f"S3 upload failed: {e}")
-    print("\n[NOTE]: The local model was saved successfully in 'model/churn_model.pkl'!")
-    print("If the S3 upload failed, make sure you have configured your AWS CLI credentials using 'aws configure'.")
+
+    print("\n[NOTE]")
+    print("Local model saved successfully at:")
+    print("model/churn_model.pkl")
+
+    print("If S3 upload failed, verify:")
+    print("- AWS credentials")
+    print("- Bucket exists")
+    print("- IAM permissions")
